@@ -34,7 +34,7 @@ sse_df = pd.DataFrame(sses)
 silhouette_scores_df = pd.DataFrame(silhouette_scores)
 
 sse_df.to_excel(excel_writer="/home/<user>/Desktop/python-machine-learning-/1_to_20/sse.xlsx", header=None, index=True)
-silhouette_scores_df.to_excel(excel_writer="/home/zahed/Desktop/python-machine-learning-/1_to_20/silhouette_scores.xlsx", header=None, index=True)
+silhouette_scores_df.to_excel(excel_writer="/home/<user>/Desktop/python-machine-learning-/1_to_20/silhouette_scores.xlsx", header=None, index=True)
 
 # Code for generating silhouette coefficients of individual samples in all datasets.
 for i in range(0, 56):
