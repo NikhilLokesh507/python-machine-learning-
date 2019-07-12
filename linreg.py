@@ -5,15 +5,15 @@ import statistics
 
 def RMSE(list1,c):
 	sum1=0
-	for x in len(list1):
+	for x in range(0,len(list1)):
 		sum1+=(list1[x]-c[x])**2
-	val=math.sqrt(sum1/len(lsit1))
+	val=math.sqrt(sum1/len(list1))
 	return val
 
 
 def MMRE(list1,c):
 	sum1=0
-	for x in len(list1):
+	for x in range(0,len(list1)):
 		sum1+=(math.fabs(list1[x]-c[x]))/math.fabs(c[x]+0.005)
 	return sum1/len(list1)
 
@@ -71,46 +71,53 @@ def LinReg(c,feature):
 	return l
 
 
-filename = ""
-for x in range(1,57):
-	filename="{}.csv".format(x)
-	rows = []
-	with open(filename, 'r') as csvfile: 
-    	csvreader = csv.reader(csvfile) 
-    	for row in csvreader:
-        	rows.append([float(col) for col in row])  
-	features=[]
-	numf=len(rows[0])
-	numr=len(rows)
-	for x in range(0,numf):
-		feature=[]
-		for row in rows:
-			feature.append(row[x])
-		features.append(feature)
 
+filename="37.csv"
+rows = []
+with open(filename, 'r') as csvfile: 
+    csvreader = csv.reader(csvfile) 
+    for row in csvreader:
+        rows.append([float(col) for col in row])  
+features=[]
+numf=len(rows[0])
+numr=len(rows)
+for x in range(0,numf):
+	feature=[]
+	for row in rows:
+		feature.append(row[x])
+	features.append(feature)
 	classv=[]
-
 #classv.append(features[numf-1])
-	for x in features[numf-1]:
-		classv.append(x)
-	classv=Normalize(classv)
-	answer=[]
-	rmse=[]
-	mmre=[]
-	ho=0.7*numr
-	#ho is the magnitude of the holdout, we are using holdout method.
-	for feature in features:
-		answer.append(LinReg(classv[:ho],feature[:ho]))
-		#we are modelling for the SLR model for objects with indices from 0 to ho
-	for feature in features:
-		ind=features.index(feature)
-		if answer[ind][0]!="NA":
-			l=[answer[ind][0]*feature[x]+answer[ind][1] for x in range(ho,numr)]
-			rmse.append(RMSE(l,classv[ho:]))
-			mmre.append(MMRE(l,classv[ho:]))
-		else:
-			rmse.append("NA")
-			mmre.append("NA")
-            
+for x in features[numf-1]:
+	classv.append(x)
+classv=Normalize(classv)
+answer=[]
+rmse=[]
+mmre=[]
+ho=int(0.7*numr)
+#ho is the magnitude of the holdout, we are using holdout method.
+for feature in features:
+	answer.append(LinReg(classv[:ho],feature[:ho]))
+	#we are modelling for the SLR model for objects with indices from 0 to ho
+for feature in features:
+	ind=features.index(feature)
+	if answer[ind][0]!="NA":
+		l=[answer[ind][0]*feature[x]+answer[ind][1] for x in range(ho,numr)]
+           #l is the list that contains predicted values if the class variable.
+		rmse.append(RMSE(l,classv[ho:]))
+		mmre.append(MMRE(l,classv[ho:]))
+	else:
+		rmse.append("NA")
+		mmre.append("NA")
 
-	#print(answer)
+print(answer)
+'''with open("result.csv",'r') as csvfile2:
+    csvreader2=csv.reader(csvfile2)
+    l=list(csvreader2)
+l.append(answer)
+with open("result.csv", 'w') as csvfile1: 
+    csvwriter= csv.writer(csvfile1) 
+    csvwriter.writerows(l)
+csvfile2.close()
+csvfile1.close()
+csvfile.close()'''
